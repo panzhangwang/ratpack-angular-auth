@@ -1,0 +1,1 @@
+A simple authentication application forked from [example-ratpack-gradle-groovy-app](https://github.com/ratpack/example-ratpack-gradle-groovy-app) and [angular-http-auth](https://github.com/witoldsz/angular-http-auth).
