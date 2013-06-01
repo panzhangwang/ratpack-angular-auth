@@ -1,3 +1,4 @@
+import org.ratpackframework.session.Session
 import org.ratpackframework.session.store.MapSessionsModule
 import org.ratpackframework.session.store.SessionStorage
 
@@ -16,7 +17,7 @@ ratpack {
                     clientError(401)
                     return
                 } 
-                next()                
+                next()
             }
 
             post("protect") {
@@ -24,14 +25,20 @@ ratpack {
             }
         }
 
-        post("auth/login") {
-            def username = request.form.username
-            def password = request.form.password
-            if (username == "user" && password == "pass") {
-                get(SessionStorage).auth = true
-                response.send "application/json", toJson("")
-            } else {
-                clientError(401)
+        prefix("auth") {
+            post("login") {
+                def username = request.form.username
+                def password = request.form.password
+                if (username == "user" && password == "pass") {
+                    get(SessionStorage).auth = true
+                    response.send "application/json", toJson("")
+                } else {
+                    clientError(401)
+                }
+            }
+            post("logout") {
+                get(Session).terminate()
+                response.send()
             }
         }
 
