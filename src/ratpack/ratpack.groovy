@@ -14,6 +14,8 @@ ratpack {
             handler {
                 if (!get(SessionStorage).auth) {
                     response.status(401).send()
+                } else {
+                    next()
                 }
             }
 
