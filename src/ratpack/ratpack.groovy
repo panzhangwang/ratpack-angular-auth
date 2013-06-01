@@ -43,5 +43,9 @@ ratpack {
         }
 
         assets "public", "index.html"
+        
+        handler {
+            clientError(404)
+        }
     }
 }
