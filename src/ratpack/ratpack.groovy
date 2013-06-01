@@ -27,9 +27,8 @@ ratpack {
 
         prefix("auth") {
             post("login") {
-                def username = request.form.username
-                def password = request.form.password
-                if (username == "user" && password == "pass") {
+                def form = request.form
+                if (form.username == "user" && form.password == "pass") {
                     get(SessionStorage).auth = true
                     response.send "application/json", toJson("")
                 } else {
