@@ -21,7 +21,7 @@ ratpack {
             }
 
             post("protect") {
-                response.send "application/json", toJson("protected content")
+                response.send "application/json", toJson(request.text)
             }
         }
 
