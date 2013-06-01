@@ -13,10 +13,10 @@ ratpack {
         prefix("apps") {
             handler {
                 if (!get(SessionStorage).auth) {
-                    response.status(401).send()
-                } else {
-                    next()
-                }
+                    clientError(401)
+                    return
+                } 
+                next()                
             }
 
             post("protect") {
@@ -29,14 +29,12 @@ ratpack {
             def password = request.form.password
             if (username == "user" && password == "pass") {
                 get(SessionStorage).auth = true
-                response.status(200).send "application/json", toJson("")
+                response.send "application/json", toJson("")
             } else {
-                response.status(401).send()
+                clientError(401)
             }
         }
 
         assets "public", "index.html"
     }
 }
-
-
