@@ -15,7 +15,6 @@ ratpack {
             handler {
                 if (!get(SessionStorage).auth) {
                     clientError(401)
-                    return
                 } 
                 next()
             }
