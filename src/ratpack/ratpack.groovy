@@ -1,55 +1,37 @@
-import groovywebconsole.ReloadingThing
-import groovywebconsole.ScriptExecutor
-import org.ratpackframework.groovy.templating.TemplateRenderer
+import org.ratpackframework.session.store.MapSessionsModule
+import org.ratpackframework.session.store.SessionStorage
 
 import static groovy.json.JsonOutput.toJson
 import static org.ratpackframework.groovy.RatpackScript.ratpack
 
-import org.ratpackframework.session.*
-import org.ratpackframework.session.store.SessionStorage
-import org.ratpackframework.session.store.MapSessionStore
-import org.ratpackframework.handling.Exchange
-import org.ratpackframework.session.store.MapSessionsModule
-
-
 ratpack {
-	modules {
-		register(new MapSessionsModule(10, 5))        
+    modules {
+        register(new MapSessionsModule(10, 5))
     }
-	
-    handlers {
-		handler {
-			  def path = request.path
-			  if (path.startsWith("apps")) {
-			  def cookie = request.oneCookie("JSESSIONID")
-			  def token = get(MapSessionStore).get(cookie).get(cookie)
-				if (!token) {
-				response.status(401).send("")	
-				} else {
-				next()
-				}				
-			  }	else {
-			    next()
-			  }
-		}
 
-		post ("auth/login") {
-		    def cookie = request.oneCookie("JSESSIONID")
-			def storage = get(MapSessionStore).get(cookie)
-			def form = request.getForm()
-			def username = form.get("username")
-			def password = form.get("password")
-			if (username == "user" && password == "pass") {
-				storage.putIfAbsent(cookie, true)
-				response.status(200).send "application/json", toJson("")
-			} else {
-			  response.status(401).send("")	
-			}			
-		}
-		
-		post ("apps/protect") {
-			response.send "application/json", toJson("protected content")
-		}
+    handlers {
+        prefix("apps") {
+            handler {
+                if (!get(SessionStorage).auth) {
+                    response.status(401).send()
+                }
+            }
+
+            post("protect") {
+                response.send "application/json", toJson("protected content")
+            }
+        }
+
+        post("auth/login") {
+            def username = request.form.username
+            def password = request.form.password
+            if (username == "user" && password == "pass") {
+                get(SessionStorage).auth = true
+                response.status(200).send "application/json", toJson("")
+            } else {
+                response.status(401).send()
+            }
+        }
 
         assets "public", "index.html"
     }
