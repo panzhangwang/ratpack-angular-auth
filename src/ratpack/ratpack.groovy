@@ -13,6 +13,11 @@ ratpack {
     }
 
     handlers {
+        handler {
+            logger.info("request: " + request.uri)
+            next()
+        }
+
         prefix("apps") {
             handler {
                 if (!get(SessionStorage).auth) {
