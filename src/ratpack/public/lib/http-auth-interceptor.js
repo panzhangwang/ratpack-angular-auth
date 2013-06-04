@@ -44,6 +44,8 @@
           $rootScope.$broadcast('event:auth-loginRequired');
           return deferred.promise;
         }
+        alert("Oops! Error... Details are logged.");
+  	    console.log(response.data);
         // otherwise, default behaviour
         return $q.reject(response);
       }
