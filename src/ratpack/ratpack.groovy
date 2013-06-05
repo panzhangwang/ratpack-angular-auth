@@ -52,7 +52,9 @@ ratpack {
                 }
             }
             post("logout") {
-                get(Session).terminate()
+                if (get(Session).existingId) {
+    				get(Session).terminate()
+				}
                 response.send()
             }
         }
