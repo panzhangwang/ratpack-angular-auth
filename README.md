@@ -11,3 +11,6 @@ Check this project out, cd into the directory and run:
 This will start the ratpack app. In your browser go to <http://localhost:5050>.
 
 To post protected content, you need log in as demo user: user/pass.
+
+
+Yoke/Vert.x version goes here, https://github.com/panzhangwang/vertx-angular-auth
